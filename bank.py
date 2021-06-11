@@ -144,6 +144,13 @@ class MobileMoneyAccount(Account):
             return f"You have insufficient balance"
         else:
             self.balance-=amount
+            transaction={
+                "amount":amount,
+                "balance":self.balance,
+                "time":datetime.now(),
+                "narration":"You bought airtime"
+                }
+            self.transactions.append(transaction)
             return f"You have bought airtime of {amount}. Your new balance is {self.balance}"
 
              
