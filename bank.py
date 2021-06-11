@@ -13,8 +13,13 @@ class Account:
             self.loan=0
             self.loan_limit=500000
     def deposit(self,amount):
+        try:
+            amount+10
+        except TypeError:
+            return f"Please enter amount in figures"
+            amount
         if amount<=0:
-            return "Please deposit a valid amount"
+            return f"Please deposit a valid amount"
 
         else:
              self.balance+=amount
@@ -32,9 +37,14 @@ class Account:
             amount=transaction["amount"]
             balance=transaction["balance"]
             time=transaction["time"]
-            date=time.strftime("%D")
+            date=time.strftime("%D" )
             print (f"{date}.. {narration}..{amount}..Balance {balance}")
     def withdraw(self,amount):
+        try:
+            amount+10
+        except TypeError:
+            return f"Please deposit a valid amount"
+
         total_amount=amount+self.transaction_fee
         if amount<=0:
             return "You can't withdraw negative amount "
@@ -53,6 +63,10 @@ class Account:
             return f"You have successfully withdrawn {amount} your balance is {self.balance}"
              
     def borrow(self,amount):
+        try:
+            amount+10
+        except TypeError:
+            return f"Please enter amount in figures"
        
         if amount>=self.loan_limit:
             return f"You can't borrow"
@@ -90,6 +104,7 @@ class Account:
         else:
             difference=amount-self.loan
             self.balance+=difference
+            self.loan=0
             transaction={
                 "amount":amount,
                 "balance":self.balance,
@@ -97,5 +112,38 @@ class Account:
                 "narration":"Loan"
                 }
             self.transactions.append(transaction)
-            return f"You have fully paid your loan and your balance is {self.balance}"        
+            return f"You have fully paid your loan and your balance is {self.balance}" 
+    def transfer(self,amount,account):
+        try:
+              10+amount
+        except TypeError:
+                 return f"The amount must be in figures"
+        fee=amount*0.05
+        total=amount+fee
+      
+        if total>self.balance:
+            return f"your balance is {self.balance} and you need {total} inoder to transfer"
+        else:
+            self.balance-= total
+            account.deposit(amount)
+            return f"you have sent {amount} to {account.name} and your balance is {self.balance}" 
+
+class MobileMoneyAccount(Account):
+    def __init__(self,name,phone,service_provider):
+        Account.__init__(self,name,phone)
+        self.serviceProvider=service_provider
+        
+    def buy_airtime(self,amount):
+        try:
+              amount+10
+        except TypeError:
+                 return f"The amount must be in figures"
+        if amount<0:
+            return f"Enter a positive amount"
+        elif amount>self.balance:
+            return f"You have insufficient balance"
+        else:
+            self.balance-=amount
+            return f"You have bought airtime of {amount}. Your new balance is {self.balance}"
+
              
